@@ -9,7 +9,7 @@ interface Auditoria {
   id: string
   asesora: string
   canal: string
-  semana: string
+  referencia: string
   mes: string
   score: number | null
   notas: string
@@ -111,7 +111,7 @@ export default function AuditoriaDetail() {
           ))}
         </div>
         <div className="grid grid-cols-3 gap-4 mb-6">
-          {[["SEMANA", data.semana], ["FECHA", new Date(data.created_at).toLocaleDateString("es-MX")], ["", ""]].map(([l, v]) => (
+          {[["REFERENCIA", data.referencia], ["FECHA", new Date(data.created_at).toLocaleDateString("es-MX")], ["", ""]].map(([l, v]) => (
             <div key={l}>
               {l && <>
                 <p className="text-xs font-bold text-ms-mid tracking-wide mb-1">{l}</p>

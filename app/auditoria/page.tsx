@@ -8,7 +8,7 @@ export default function NuevaAuditoria() {
   const router = useRouter()
   const [asesora, setAsesora]     = useState("")
   const [canal, setCanal]         = useState("")
-  const [semana, setSemana]       = useState("")
+  const [referencia, setReferencia]       = useState("")
   const [notas, setNotas]         = useState("")
   const [respuestas, setRespuestas] = useState<Record<string, string>>({})
   const [saving, setSaving]       = useState(false)
@@ -18,7 +18,7 @@ export default function NuevaAuditoria() {
   const totalItems = SECCIONES.flatMap(s => s.items).length + ITEMS_GENERALES.length
   const respondidos = Object.keys(respuestas).length
   const progreso = Math.round((respondidos / totalItems) * 100)
-  const canSave = asesora && canal && semana
+  const canSave = asesora && canal && referencia
 
   function set(id: string, val: string) {
     setRespuestas(prev => ({ ...prev, [id]: val }))
@@ -27,16 +27,16 @@ export default function NuevaAuditoria() {
   async function handleGuardar() {
     if (!canSave) return
     setSaving(true)
-    const [y, m] = semana.split("-W")[0] ? semana.split("-") : ["", ""]
-    const mes = semana.includes("-W")
+    const [y, m] = referencia.split("-W")[0] ? referencia.split("-") : ["", ""]
+    const mes = referencia.includes("-W")
       ? (() => {
-          const d = new Date(semana + "-1")
+          const d = new Date(referencia + "-1")
           return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`
         })()
       : `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}`
 
     const { data, error } = await supabase.from("auditorias").insert({
-      asesora, canal, semana, mes, notas, respuestas, score,
+      asesora, canal, referencia, mes, notas, respuestas, score,
       auditora, // stored in DB but never shown in print
     }).select("id").single()
 
@@ -84,8 +84,8 @@ export default function NuevaAuditoria() {
               </div>
             ))}
             <div>
-              <label className="text-xs font-semibold text-ms-mid block mb-1.5">SEMANA</label>
-              <input type="week" value={semana} onChange={e => setSemana(e.target.value)}
+              <label className="text-xs font-semibold text-ms-mid block mb-1.5">REFERENCIA</label>
+              <input type="text" value={referencia} onChange={e => setReferencia(e.target.value)}
                 className="w-full border border-ms-light rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gold" />
             </div>
             <div className="flex items-end">

@@ -7,7 +7,7 @@ import Link from "next/link"
 
 interface Auditoria {
   id: string; asesora: string; canal: string
-  semana: string; mes: string; score: number | null; created_at: string
+  referencia: string; mes: string; score: number | null; created_at: string
 }
 
 const MESES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
@@ -29,7 +29,7 @@ export default function Home() {
   async function fetchAuditorias() {
     const { data } = await supabase
       .from("auditorias")
-      .select("id, asesora, canal, semana, mes, score, created_at")
+      .select("id, asesora, canal, referencia, mes, score, created_at")
       .order("created_at", { ascending: false })
     setAuditorias(data || [])
     setLoading(false)
@@ -125,7 +125,7 @@ export default function Home() {
                     className="bg-white rounded-xl px-5 py-4 flex justify-between items-center shadow-sm hover:shadow-md transition-shadow block">
                     <div>
                       <p className="font-semibold text-ms-dark">{a.asesora}</p>
-                      <p className="text-xs text-ms-mid">{a.canal} · Semana {a.semana}</p>
+                      <p className="text-xs text-ms-mid">{a.canal} · Referencia {a.referencia}</p>
                     </div>
                     <div className="flex items-center gap-4">
                       {a.score !== null && <span className="text-xl font-bold" style={{ color }}>{a.score}%</span>}

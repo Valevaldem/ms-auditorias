@@ -29,10 +29,10 @@ export const SECCIONES: Seccion[] = [
   ]},
   { id: "cotizacion", titulo: "2. Cotización", color: "#A8842B", items: [
     { id: "preguntas_acertadas",          label: "Preguntas acertadas",             hint: "Hace las preguntas correctas: material, talla, ocasión, presupuesto",              opciones: OPCIONES.tricolor },
-    { id: "tiempo_cotizacion",            label: "Tiempo de cotización",            hint: "Piezas de línea ≤2 días · Fully custom ≤1 semana · N/A si no aplica",             opciones: OPCIONES.tricolorNA },
+    { id: "tiempo_cotizacion",            label: "Tiempo de cotización",            hint: "Piezas de línea ≤2 días · Fully custom ≤1 referencia · N/A si no aplica",             opciones: OPCIONES.tricolorNA },
     { id: "seguimiento_espera",           label: "Seguimiento durante la espera",   hint: "Avisa cuánto tardará. Update diario si >1 día. Update c/2 días si >3 días",       opciones: OPCIONES.tricolorNA },
     { id: "cotizacion_completa",          label: "Cotización completa y explícita", hint: "Precio claro, descripción completa, sin preguntas adicionales del cliente",        opciones: OPCIONES.tricolorNA },
-    { id: "tiempo_produccion",            label: "Informa tiempo de producción",    hint: "Menciona rango: 3–5 días / 15–20 días / 8–10 semanas",                             opciones: OPCIONES.tricolorNA },
+    { id: "tiempo_produccion",            label: "Informa tiempo de producción",    hint: "Menciona rango: 3–5 días / 15–20 días / 8–10 referencias",                             opciones: OPCIONES.tricolorNA },
     { id: "tipos_pago",                   label: "Tipos de pago",                   hint: "Menciona opciones (transferencia, TC, MSI) sin que el cliente lo pida",            opciones: OPCIONES.tricolorNA },
     { id: "materiales",                   label: "Materiales",                      hint: "Explica los materiales disponibles o los del producto cotizado",                   opciones: OPCIONES.tricolorNA },
     { id: "terminar_pregunta",            label: "Termina con pregunta",            hint: "No deja la conversación abierta. Ej: '¿Te gustaría que procedamos?'",              opciones: OPCIONES.tricolorNA },
