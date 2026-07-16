@@ -1,0 +1,16 @@
+@media print {
+  @page { margin: 1.5cm; size: letter; }
+
+  body { font-family: 'Poppins', Arial, sans-serif !important; font-size: 9pt; color: #1A1A1A; }
+
+  .no-print { display: none !important; }
+
+  h1 { font-size: 18pt !important; }
+
+  /* Force background colors to print */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  /* Avoid page breaks inside sections */
+  .mb-5 { page-break-inside: avoid; }
+  .rounded-b-2xl { page-break-inside: avoid; }
+}
