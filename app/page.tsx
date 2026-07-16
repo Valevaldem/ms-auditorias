@@ -6,13 +6,8 @@ import { ASESORAS, getScoreInfo } from "@/lib/criterios"
 import Link from "next/link"
 
 interface Auditoria {
-  id: string
-  asesora: string
-  canal: string
-  semana: string
-  mes: string
-  score: number | null
-  created_at: string
+  id: string; asesora: string; canal: string
+  semana: string; mes: string; score: number | null; created_at: string
 }
 
 const MESES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
@@ -20,8 +15,8 @@ const MESES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 export default function Home() {
   const router = useRouter()
   const [auditorias, setAuditorias] = useState<Auditoria[]>([])
-  const [loading, setLoading]       = useState(true)
-  const [mesActual, setMesActual]   = useState(() => {
+  const [loading, setLoading] = useState(true)
+  const [mesActual, setMesActual] = useState(() => {
     const now = new Date()
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`
   })
@@ -40,7 +35,10 @@ export default function Home() {
     setLoading(false)
   }
 
-  const mesesDisponibles = [...new Set(auditorias.map(a => a.mes))].sort().reverse()
+  const mesesDisponibles: string[] = []
+  auditorias.forEach(a => { if (!mesesDisponibles.includes(a.mes)) mesesDisponibles.push(a.mes) })
+  mesesDisponibles.sort().reverse()
+
   const delMes = auditorias.filter(a => a.mes === mesActual)
 
   function promedioAsesora(asesora: string) {
@@ -49,13 +47,8 @@ export default function Home() {
     return Math.round(scores.reduce((s, n) => s + n, 0) / scores.length)
   }
 
-  const [mesLabel, anioLabel] = mesActual.split("-")
-  const labelMes = `${MESES[parseInt(mesLabel.split("-")[1] || mesLabel) - 1] || ""} ${anioLabel || mesLabel}`
-
-  const mesNombre = (() => {
-    const [y, m] = mesActual.split("-")
-    return `${MESES[parseInt(m) - 1]} ${y}`
-  })()
+  const [y, m] = mesActual.split("-")
+  const mesNombre = `${MESES[parseInt(m)-1]} ${y}`
 
   function logout() {
     localStorage.removeItem("ms_auth")
@@ -65,42 +58,33 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-ms-bg">
-      {/* Header */}
       <div className="bg-ms-dark px-6 py-4 flex justify-between items-center sticky top-0 z-10">
         <div>
           <p className="text-xs font-bold text-gold tracking-widest">MARÍA SALINAS</p>
           <h1 className="text-white text-lg font-bold">Auditorías</h1>
         </div>
         <div className="flex gap-3 items-center">
-          <Link href="/historial" className="text-white/60 text-xs hover:text-white transition-colors">Historial</Link>
-          <Link href="/auditoria" className="bg-gold text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-gold-light transition-colors">
-            + Nueva auditoría
-          </Link>
-          <button onClick={logout} className="text-white/40 text-xs hover:text-white/70 transition-colors ml-1">Salir</button>
+          <Link href="/historial" className="text-white/60 text-xs hover:text-white">Historial</Link>
+          <Link href="/auditoria" className="bg-gold text-white text-sm font-bold px-4 py-2 rounded-lg">+ Nueva auditoría</Link>
+          <button onClick={logout} className="text-white/40 text-xs hover:text-white/70 ml-1">Salir</button>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
-
-        {/* Selector de mes */}
         <div className="flex items-center gap-4 mb-8">
           <h2 className="text-lg font-bold text-ms-dark">Resumen mensual</h2>
-          <select
-            value={mesActual}
-            onChange={e => setMesActual(e.target.value)}
-            className="border border-ms-light rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:border-gold"
-          >
+          <select value={mesActual} onChange={e => setMesActual(e.target.value)}
+            className="border border-ms-light rounded-lg px-3 py-1.5 text-sm bg-white focus:outline-none focus:border-gold">
             {mesesDisponibles.length === 0
               ? <option value={mesActual}>{mesNombre}</option>
-              : mesesDisponibles.map(m => {
-                  const [y, mo] = m.split("-")
-                  return <option key={m} value={m}>{MESES[parseInt(mo)-1]} {y}</option>
+              : mesesDisponibles.map(mes => {
+                  const [my, mm] = mes.split("-")
+                  return <option key={mes} value={mes}>{MESES[parseInt(mm)-1]} {my}</option>
                 })
             }
           </select>
         </div>
 
-        {/* Promedios por asesora */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
           {ASESORAS.map(asesora => {
             const avg = promedioAsesora(asesora)
@@ -123,7 +107,6 @@ export default function Home() {
           })}
         </div>
 
-        {/* Lista de auditorías del mes */}
         <div>
           <h3 className="text-sm font-bold text-ms-mid tracking-wide mb-4">AUDITORÍAS — {mesNombre.toUpperCase()}</h3>
           {loading ? (
@@ -145,9 +128,7 @@ export default function Home() {
                       <p className="text-xs text-ms-mid">{a.canal} · Semana {a.semana}</p>
                     </div>
                     <div className="flex items-center gap-4">
-                      {a.score !== null && (
-                        <span className="text-xl font-bold" style={{ color }}>{a.score}%</span>
-                      )}
+                      {a.score !== null && <span className="text-xl font-bold" style={{ color }}>{a.score}%</span>}
                       <span className="text-gold text-xs font-semibold">Ver →</span>
                     </div>
                   </Link>
