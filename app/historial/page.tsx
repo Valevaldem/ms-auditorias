@@ -15,7 +15,7 @@ const MESES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 export default function Historial() {
   const router = useRouter()
   const [auditorias, setAuditorias] = useState<Auditoria[]>([])
-  const [loading, setLoading]       = useState(true)
+  const [loading, setLoading] = useState(true)
   const [filtroAsesora, setFiltroAsesora] = useState("Todas")
 
   useEffect(() => {
@@ -32,7 +32,9 @@ export default function Historial() {
   }
 
   const filtradas = filtroAsesora === "Todas" ? auditorias : auditorias.filter(a => a.asesora === filtroAsesora)
-  const meses = [...new Set(filtradas.map(a => a.mes))].sort().reverse()
+  const mesesUnicos: string[] = []
+  filtradas.forEach(a => { if (!mesesUnicos.includes(a.mes)) mesesUnicos.push(a.mes) })
+  const meses = mesesUnicos.sort().reverse()
 
   return (
     <div className="min-h-screen bg-ms-bg">
@@ -42,32 +44,25 @@ export default function Historial() {
           <h1 className="text-white text-lg font-bold">Historial de auditorías</h1>
         </div>
         <div className="flex gap-3 items-center">
-          <Link href="/auditoria" className="bg-gold text-white text-sm font-bold px-4 py-2 rounded-lg hover:bg-gold-light transition-colors">+ Nueva</Link>
+          <Link href="/auditoria" className="bg-gold text-white text-sm font-bold px-4 py-2 rounded-lg">+ Nueva</Link>
           <Link href="/" className="text-white/60 text-sm hover:text-white">← Inicio</Link>
         </div>
       </div>
-
       <div className="max-w-3xl mx-auto px-4 py-6">
-        {/* Filtro asesora */}
         <div className="flex gap-2 mb-6 flex-wrap">
           {["Todas", ...ASESORAS].map(a => (
             <button key={a} onClick={() => setFiltroAsesora(a)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors border ${filtroAsesora === a ? "bg-gold text-white border-gold" : "bg-white text-ms-mid border-ms-light hover:border-gold"}`}>
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold border ${filtroAsesora === a ? "bg-gold text-white border-gold" : "bg-white text-ms-mid border-ms-light"}`}>
               {a}
             </button>
           ))}
         </div>
-
-        {loading ? (
-          <p className="text-ms-mid text-sm">Cargando...</p>
-        ) : meses.length === 0 ? (
-          <div className="bg-white rounded-xl p-8 text-center text-ms-mid text-sm">No hay auditorías aún.</div>
-        ) : (
-          meses.map(mes => {
+        {loading ? <p className="text-ms-mid text-sm">Cargando...</p>
+        : meses.length === 0 ? <div className="bg-white rounded-xl p-8 text-center text-ms-mid text-sm">No hay auditorías aún.</div>
+        : meses.map(mes => {
             const [y, m] = mes.split("-")
             const mesNombre = `${MESES[parseInt(m)-1]} ${y}`
             const delMes = filtradas.filter(a => a.mes === mes)
-
             return (
               <div key={mes} className="mb-8">
                 <h2 className="text-sm font-bold text-ms-mid tracking-widest mb-3">{mesNombre.toUpperCase()}</h2>
@@ -92,7 +87,7 @@ export default function Historial() {
               </div>
             )
           })
-        )}
+        }
       </div>
     </div>
   )
